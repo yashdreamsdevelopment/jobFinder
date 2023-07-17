@@ -50,8 +50,11 @@ const Login = ({ toast }) => {
       });
 
       const data = await response.json();
-      if (data.success) {
-        toast(data.msg, "success");
+
+      const { success, msg } = data;
+
+      if (success) {
+        toast(msg, "success");
 
         localStorage.setItem("token", data.token);
 
@@ -61,7 +64,10 @@ const Login = ({ toast }) => {
         navigation("/main");
       } else {
         setIsLoading(false);
-        toast(data.msg, "error");
+        toast(msg, "error");
+        if (msg === "Email Not Verified") {
+          navigation("/verifyEmail");
+        }
       }
     } catch (error) {
       setIsLoading(false);

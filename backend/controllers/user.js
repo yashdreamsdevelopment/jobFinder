@@ -77,7 +77,10 @@ const verifyUserMail = async (req, res) => {
 
   const token = await verifiedUser.createJWT();
 
-  res.status(200).send({ success: true, token, msg: "Account Verified" });
+  res
+    .status(200)
+    .redirect("http://localhost:5173/main")
+    .json({ success: true, token, msg: "Account Verified" });
 };
 
 module.exports = { register, login, verifyUserMail };

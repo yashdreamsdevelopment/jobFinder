@@ -74,6 +74,11 @@ const SignUp = ({ toast }) => {
 
         if (data.success) {
           toast(data.msg, "success");
+
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate("/verifyEmail");
+          }, 1000);
         } else {
           setIsLoading(false);
           toast(data.msg, "error");
