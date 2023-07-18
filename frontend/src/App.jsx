@@ -26,7 +26,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login toast={notify} />} />
         <Route path="/signup" element={<SignUp toast={notify} />} />
-        <Route path="/verifyEmail" element={<VerifyEmail />} />
+        <Route path="/verifyEmail" element={<VerifyEmail toast={notify} />} />
         <Route path="/main" element={<Main />} />
       </Routes>
     </BrowserRouter>
