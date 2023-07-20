@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
-import { useAsyncError, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Confetti from "react-confetti";
+import ToVerifyEmail from "./ToVerifyEmail";
+import VerifiedEmail from "./VerifiedEmail";
 
 const VerifyEmail = ({ toast }) => {
   const [searchParams] = useSearchParams();
   const [isVerifing, setIsVerifing] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [data, setData] = useState({});
+  const shouldCallApi = useRef(true);
 
   const navigate = useNavigate();
 
@@ -27,62 +31,44 @@ const VerifyEmail = ({ toast }) => {
 
       const data = await response.json();
 
-      console.log(data);
+      setData(data);
+      if (!data.success) setIsVerifing(false);
 
       if (data.success) {
+        toast(data.msg, "success");
         setShowConfetti(true);
-
-        setTimeout(() => {
-          toast(data.msg, "success");
-
-          localStorage.setItem("token", data.token);
-
-          setShowConfetti(false);
-          navigate("/main");
-
-          // console.log("NAVIGATING TO MAIN /MAIN");
-        }, 5000);
-      } else {
-        toast(data.msg, "error");
         setIsVerifing(false);
-        navigate("/");
-        // console.log("NAVIGATION TO HOME /");
+        setTimeout(() => {
+          setShowConfetti(false);
+          localStorage.setItem("token", data.token);
+          navigate("/main", { replace: true });
+        }, 2000);
+      } else {
+        setIsVerifing(false);
+        toast(data.msg, "error");
       }
     } catch (error) {
       console.log(error);
       setIsVerifing(false);
+      toast("Something went wrong...", "error");
     }
   };
 
   useEffect(() => {
-    console.log("INSIDE USEEFFECT HOOK");
-    if (searchParams.get("token") && !isRaned) {
-      console.log("CALLING VERIFY API");
+    if (searchParams.get("token") && shouldCallApi.current) {
+      shouldCallApi.current = false;
       verify();
-    } else {
-      console.log("NO TOKEN NO API CALL");
     }
   }, []);
 
-  // const toggleConfettiState = () => setShowConfetti(!showConfetti);
-
-  // const toggleVerifingState = () => setIsVerifing(!isVerifing);
-
   return (
-    <div>
+    <>
       {showConfetti && <Confetti {...confettiSettings} />}
-      <h1>{isVerifing ? "Verifying" : "Verify"} your email</h1>
-      <p>Almost there! We've sent a verification email to &lt; Email &gt;,</p>
-      <p>You need to verify you email address to log into Job Finder</p>
 
-      <p>
-        <code>05:00</code>
-      </p>
+      {Object.keys(data).length === 0 && <ToVerifyEmail />}
 
-      <button className="button">
-        {isVerifing ? "Verifying..." : "Resend Mail"}
-      </button>
-    </div>
+      {Object.keys(data).length > 0 && <VerifiedEmail title={data.msg} />}
+    </>
   );
 };
 

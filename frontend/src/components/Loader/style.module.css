@@ -1,0 +1,29 @@
+.Loader__Container {
+  /* border: 2px solid red; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.Loader {
+  width: 30px;
+  height: 30px;
+  border: transparent;
+  border: 2px solid transparent;
+  border-top: 2px solid slateblue;
+  border-bottom: 2px solid slateblue;
+  border-radius: 50%;
+  animation: rotate 0.5s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    rotate: 0deg;
+  }
+  from {
+    rotate: 360deg;
+  }
+}
