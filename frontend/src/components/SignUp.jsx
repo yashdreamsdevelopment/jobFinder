@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContext } from "../ToastContext";
 
-const SignUp = ({ toast }) => {
+const SignUp = () => {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({});
   const [isloading, setIsLoading] = useState(false);
   const [visitedField, setVisitedField] = useState({});
   const navigate = useNavigate();
+  const { notify: toast } = useContext(ToastContext);
 
   useEffect(() => {
     const validateTimout = setTimeout(() => {

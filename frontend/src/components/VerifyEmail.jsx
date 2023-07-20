@@ -1,26 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Confetti from "react-confetti";
 import ToVerifyEmail from "./ToVerifyEmail";
 import VerifiedEmail from "./VerifiedEmail";
+import { ToastContext } from "../ToastContext";
 
-const VerifyEmail = ({ toast }) => {
+const confettiSettings = {
+  width: window.innerWidth,
+  height: window.innerHeight,
+  numberOfPieces: 500,
+  gravity: 0.3,
+  wind: 0,
+  tweenDuration: 1000,
+};
+
+const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const [isVerifing, setIsVerifing] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [data, setData] = useState({});
   const shouldCallApi = useRef(true);
+  const { notify: toast } = useContext(ToastContext);
 
   const navigate = useNavigate();
 
-  const confettiSettings = {
-    width: window.innerWidth,
-    height: window.innerHeight,
-    numberOfPieces: 500,
-    gravity: 0.3,
-    wind: 0,
-    tweenDuration: 1000,
-  };
+
 
   const verify = async () => {
     setIsVerifing(true);

@@ -7,7 +7,7 @@ const Main = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token || token === "") {
+    if (!token) {
       navigation("/");
     } else {
       setIsLoading(true);

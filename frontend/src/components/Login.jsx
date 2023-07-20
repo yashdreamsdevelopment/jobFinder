@@ -1,37 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContext } from "../ToastContext";
+import authService from "../services/auth.service";
 
-const Login = ({ toast }) => {
+const emailRegex = !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
+const Login = () => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const { notify: toast } = useContext(ToastContext);
 
   const navigation = useNavigate();
 
   const validateFormData = () => {
     const errorObj = {};
 
-    if (formData.password) {
-      if (formData.password.length < 6) {
-        errorObj.password = "Password must be greater than 6 characters";
-      }
-    } else {
-      delete errorObj.password;
+    if (formData.password?.length < 6) {
+      errorObj.password = "Password must be greater than 6 characters";
     }
 
-    if (formData.email) {
-      if (
-        !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-          formData.email
-        )
-      ) {
-        errorObj.email = "Please provide a valid email";
-      }
-    } else {
-      delete errorObj.email;
+    if (emailRegex.test(formData.email)) {
+      errorObj.email = "Please provide a valid email";
     }
 
-    setErrors((prevState) => ({ ...errorObj }));
+    setErrors(errorObj);
   };
 
   const handleSubmit = async (e) => {
@@ -40,23 +34,12 @@ const Login = ({ toast }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/v1/user/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        type: "cors",
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      const { success, msg } = data;
+      const { success, msg, token } = authService.login(formData);
 
       if (success) {
         toast(msg, "success");
 
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", token);
 
         setFormData({});
         setErrors({});
@@ -104,7 +87,7 @@ const Login = ({ toast }) => {
           <span className="field-error-msg">{errors.email}</span>
         )}
 
-        <div className="form-group">
+        <div className="form-group">``
           <label htmlFor="password">Password</label>
           <input
             type="password"
