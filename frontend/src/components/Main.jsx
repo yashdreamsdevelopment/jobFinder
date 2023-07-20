@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Main = () => {
@@ -18,7 +18,11 @@ const Main = () => {
     }
   }, []);
 
-  return <div>{isLoading ? <h1>Warming up...</h1> : <h1>Main</h1>}</div>;
+  return (
+    <Suspense fallback={<h1>🌀 Loading...</h1>}>
+      <h1>Main</h1>
+    </Suspense>
+  );
 };
 
 export default Main;

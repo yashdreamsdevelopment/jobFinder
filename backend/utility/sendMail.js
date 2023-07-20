@@ -15,7 +15,7 @@ const shootMail = async (name, email, token) => {
       from: '"Jobs Finder" <no-reply@jobsFinder.com>',
       to: email,
       subject: "Account Verification",
-      html: `<h1>Hi ${name} 👋</h1> <h2>Verify Your Account</h2> <a href='http://localhost:3000/api/v1/user/verify/${token}'>Verify</a>`,
+      html: `<h1>Hi ${name} 👋</h1> <h2>Verify Your Account</h2> <a href='http://localhost:5173/verifyEmail?token=${token}'>Verify</a>`,
     });
 
     if (info.messageId) {

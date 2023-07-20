@@ -59,10 +59,13 @@ const verifyUserMail = async (req, res) => {
   const { id } = req.params;
 
   const user = await User.findOne({ token: id });
-  console.log(user);
 
   if (!user) {
     return res.status(404).send("Not a valid user");
+  }
+
+  if (user.isVerified) {
+    return res.status(404).send({ success: false, msg: "Link Expired" });
   }
 
   const verifiedUser = await User.findOneAndUpdate(
@@ -71,13 +74,9 @@ const verifyUserMail = async (req, res) => {
     { new: true }
   );
 
-  if (!verifiedUser) {
-    return res.status(404).send("<h1>Link Expired</h1>");
-  }
-
   const token = await verifiedUser.createJWT();
 
-  res.status(200).send({ success: true, token, msg: "Account Verified" });
+  res.status(200).json({ success: true, token, msg: "Account Verified" });
 };
 
 module.exports = { register, login, verifyUserMail };

@@ -1,0 +1,24 @@
+{
+  "name": "6-jobs-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd frontend/ && npm run dev\" \"cd backend/ && npm start\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yashdreamsdevelopment/jobFinder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yashdreamsdevelopment/jobFinder/issues"
+  },
+  "homepage": "https://github.com/yashdreamsdevelopment/jobFinder#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
