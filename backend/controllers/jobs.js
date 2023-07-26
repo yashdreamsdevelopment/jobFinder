@@ -6,6 +6,7 @@ const {
 const Job = require("../models/Job");
 
 const getAllJobs = async (req, res) => {
+  // console.log("I WILL FETCH ALL JOBS");
   const jobs = await Job.find({});
   res.status(200).send({ success: true, data: jobs, results: jobs.length });
 };
@@ -25,7 +26,9 @@ const createJob = async (req, res) => {
     throw new BadRequestErrorAPI("job not created");
   }
 
-  res.status(201).send({ success: true, msg: "Job created successfully" });
+  res
+    .status(201)
+    .send({ success: true, msg: "Job created successfully", data: job });
 };
 
 const getJob = async (req, res) => {

@@ -51,8 +51,11 @@ const login = async (req, res) => {
   }
 
   const token = await user.createJWT();
+  const data = { name: user.name, email: user.email };
 
-  res.status(200).send({ success: true, token, msg: "logged in successfully" });
+  res
+    .status(200)
+    .send({ success: true, token, msg: "logged in successfully", data });
 };
 
 const verifyUserMail = async (req, res) => {
@@ -76,7 +79,9 @@ const verifyUserMail = async (req, res) => {
 
   const token = await verifiedUser.createJWT();
 
-  res.status(200).json({ success: true, token, msg: "Account Verified" });
+  const data = { name: user.name, email: user.email };
+
+  res.status(200).json({ success: true, token, msg: "Account Verified", data });
 };
 
 module.exports = { register, login, verifyUserMail };
