@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/user/UserContext";
+import { ToastContext } from "../context/toast/ToastContext";
 
-const Login = ({ toast }) => {
+const Login = () => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const { setUser } = useContext(UserContext);
+  const { notify } = useContext(ToastContext);
 
   const navigation = useNavigate();
 
@@ -51,27 +56,28 @@ const Login = ({ toast }) => {
 
       const data = await response.json();
 
-      const { success, msg } = data;
+      const { success, msg, data: user, token } = data;
 
       if (success) {
-        toast(msg, "success");
+        notify(msg, "success");
 
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", token);
 
+        setUser(user);
         setFormData({});
         setErrors({});
         setIsLoading(false);
         navigation("/main");
       } else {
         setIsLoading(false);
-        toast(msg, "error");
+        notify(msg, "error");
         if (msg === "Email Not Verified") {
           navigation("/verifyEmail");
         }
       }
     } catch (error) {
       setIsLoading(false);
-      toast("something went wrong", "error");
+      notify("someting went wrong", "error");
     }
   };
 

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContext } from "../context/toast/ToastContext";
 
 const SignUp = ({ toast }) => {
   const [errors, setErrors] = useState({});
@@ -7,6 +8,8 @@ const SignUp = ({ toast }) => {
   const [isloading, setIsLoading] = useState(false);
   const [visitedField, setVisitedField] = useState({});
   const navigate = useNavigate();
+
+  const { notify } = useContext(ToastContext);
 
   useEffect(() => {
     const validateTimout = setTimeout(() => {
@@ -73,7 +76,7 @@ const SignUp = ({ toast }) => {
         const data = await response.json();
 
         if (data.success) {
-          toast(data.msg, "success");
+          notify(data.msg, "success");
 
           setTimeout(() => {
             setIsLoading(false);
@@ -81,11 +84,11 @@ const SignUp = ({ toast }) => {
           }, 1000);
         } else {
           setIsLoading(false);
-          toast(data.msg, "error");
+          notify(data.msg, "error");
         }
       } catch (error) {
         setIsLoading(false);
-        toast("Something went wrong", "error");
+        notify("Something went wrong", "error");
       }
     } else {
       setIsLoading(false);

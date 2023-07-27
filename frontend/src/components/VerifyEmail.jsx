@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Confetti from "react-confetti";
 import ToVerifyEmail from "./ToVerifyEmail";
 import VerifiedEmail from "./VerifiedEmail";
+
+import { UserContext } from "../context/user/UserContext";
 
 const VerifyEmail = ({ toast }) => {
   const [searchParams] = useSearchParams();
@@ -12,6 +14,8 @@ const VerifyEmail = ({ toast }) => {
   const shouldCallApi = useRef(true);
 
   const navigate = useNavigate();
+
+  const { setUser } = useContext(UserContext);
 
   const confettiSettings = {
     width: window.innerWidth,
@@ -36,8 +40,12 @@ const VerifyEmail = ({ toast }) => {
 
       if (data.success) {
         toast(data.msg, "success");
+
+        setUser(data.data);
+
         setShowConfetti(true);
         setIsVerifing(false);
+
         setTimeout(() => {
           setShowConfetti(false);
           localStorage.setItem("token", data.token);
